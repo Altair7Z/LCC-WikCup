@@ -196,7 +196,7 @@ linear-gradient(105deg,#ffe600 0%,#ffc800 40%,#ffaa00 78%,#ff9a00 100%)}
 /* ===== Skin Festival ===== */
 html:root[data-skin="fest"]{--bg:#fdeeb8;--surface:#fffaf0;--ink:#14275f;--muted:#4a5a8f;--line:#1f3a8a;--gold:#f0319b;--t0:#d9302a;--t1:#08876c;--t2:#2447b5;--on:#fff}
 html[data-skin="fest"] body{background:repeating-conic-gradient(from 0deg at 50% 18%,#f7b52c 0 9deg,#fde8a6 9deg 18deg) fixed}
-html[data-skin="fest"] #theme{display:none}
+
 html[data-skin="fest"] .soalview{--bg:#fdeeb8;--surface:#fffaf0;--ink:#14275f;--muted:#4a5a8f;--line:#1f3a8a;--gold:#f0319b;--t0:#d9302a;--t1:#08876c;--t2:#2447b5;--on:#fff;
 --fb:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%232447b5' stroke='%231f3a8a' stroke-width='4'%3E%3Ccircle cx='50' cy='22' r='19'/%3E%3Ccircle cx='77' cy='42' r='19'/%3E%3Ccircle cx='67' cy='74' r='19'/%3E%3Ccircle cx='33' cy='74' r='19'/%3E%3Ccircle cx='23' cy='42' r='19'/%3E%3C/g%3E%3Ccircle cx='50' cy='52' r='15' fill='%23f7b52c' stroke='%231f3a8a' stroke-width='4'/%3E%3C/svg%3E");
 --fr:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23d9302a' stroke='%231f3a8a' stroke-width='4'%3E%3Ccircle cx='50' cy='22' r='19'/%3E%3Ccircle cx='77' cy='42' r='19'/%3E%3Ccircle cx='67' cy='74' r='19'/%3E%3Ccircle cx='33' cy='74' r='19'/%3E%3Ccircle cx='23' cy='42' r='19'/%3E%3C/g%3E%3Ccircle cx='50' cy='52' r='15' fill='%23f7b52c' stroke='%231f3a8a' stroke-width='4'/%3E%3C/svg%3E");
@@ -213,6 +213,16 @@ html[data-skin="fest"] .turn{border:3px solid #1f3a8a;box-shadow:3px 3px 0 #1f3a
 html[data-skin="fest"] .anim h1{color:#f0319b;-webkit-text-stroke:.06em #fff;paint-order:stroke fill;text-shadow:.04em .07em 0 #1f3a8a}
 html[data-skin="fest"] .plus{border:3px solid #1f3a8a;box-shadow:4px 4px 0 #1f3a8a}
 html[data-skin="fest"] :is(.g,.ctl button,.ctl select,.presets button,.tabs){border-width:2.5px;box-shadow:3px 3px 0 #1f3a8a}
+.opth,.ocfg{display:grid;gap:8px;padding:12px 16px;background:var(--surface);border:2px solid var(--line);border-radius:16px}
+.opth small{color:var(--muted)}.opth .g:disabled{opacity:.4;cursor:default}
+.ocfg summary{cursor:pointer;font-weight:700}
+.cfr{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.cfr .seg{margin-right:0}
+.cfr select{padding:.5em .8em;border-radius:10px;border:2px solid var(--line);background:var(--surface);color:var(--ink);font:500 .95rem Rubik,sans-serif}
+html[data-skin="fest"] .bar{margin:0 0 14px;padding:12px clamp(10px,1.5vw,24px);background:#fff;color:#14275f;border-bottom:3px solid #1f3a8a;--ink:#14275f;--muted:#4a5a8f;--surface:#fff;--line:#1f3a8a;--bg:#fff}
+html[data-skin="fest"] .bar .title{font-family:Rubik,sans-serif;font-weight:700}
+html[data-skin="fest"] .bar :is(.g,.ctl button,.ctl select,.tabs){box-shadow:none;border-width:2px}
+@media (prefers-color-scheme:dark){html[data-skin="fest"]:not([data-theme="light"]) .bar{background:#0f1220;color:#fff;border-bottom-color:#000;--ink:#fff;--muted:#b8c0dc;--surface:#1b2033;--line:#5b6aa0;--bg:#0f1220}}
+html[data-skin="fest"][data-theme="dark"] .bar{background:#0f1220;color:#fff;border-bottom-color:#000;--ink:#fff;--muted:#b8c0dc;--surface:#1b2033;--line:#5b6aa0;--bg:#0f1220}
 </style>
 </head>
 <body class="s-default">
@@ -402,7 +412,7 @@ let mode='menu',steps=[],pos=0,tm=null,tl=0,paused=false,ph=0,cur=1;
 const qSync=mkSync('lcc/soal',()=>Q,d=>d.s1&&d.s2&&d.s3,d=>{Q=normQ(d);try{localStorage.setItem(SK,JSON.stringify(Q))}catch(e){}
   if(mode==='menu'||(mode==='edit'&&!V.contains(document.activeElement)))V.hidden||(mode==='menu'?soalMenu():V.innerHTML=editHTML())},800);
 var rq;const saveQ=()=>{try{localStorage.setItem(SK,JSON.stringify(Q))}catch(e){}qSync.push();clearTimeout(rq);rq=setTimeout(()=>roomPush('soal'),800)};
-function build(n){cur=n;base=S.scores.slice();clearVd(n);
+function build(n){cur=n;if(CFG.sb==='all'||n===1||!base)base=S.scores.slice();clearVd(n);
   const st=[],M=['Amplop','Lemparan','Rebutan'],IC=['✉️','🔄','⚡'];
   if(n===1){let o=0;for(let e=0;e<3;e++){const c=Q.n.s1[e];if(!c)continue;st.push({k:'anim',txt:AMP[e],sub:'Sesi 1 · Amplop',ic:IC[0]});for(let j=0;j<c;j++)st.push({k:'q',s:'s1',i:o+j,ttl:AMP[e],no:j+1,of:c,timer:1});o+=c}}
   else{const s='s'+n,tot=Q[s].length;st.push({k:'anim',txt:'Sesi '+M[n-1],sub:'Sesi '+n,ic:''});let o=0;Q.n[s].forEach((c,t)=>{for(let j=0;j<c;j++)st.push({k:'q',s,i:o+j,ttl:M[n-1],no:o+j+1,of:tot,timer:1,team:n===2?t:-1});o+=c})}
@@ -427,11 +437,11 @@ function startT(sec){tl=sec;paused=false;paint();tm=setInterval(()=>{if(paused||
 function expire(){
   buzz();const t=$('#thr'),st=steps[pos];if(!t)return;t.hidden=false;
   if(st.s==='s2'&&ph<2){
-    t.textContent='Waktu habis - soal di lempar ke tim berikutnya';ph++;
-    const i=(st.team+ph)%3,e=$('#turn'),l=$('#tl');
-    if(e){e.style.setProperty('--c','var(--t'+i+')');e.textContent='Giliran: '+S.names[i]}
-    if(l)l.textContent='Dilempar · 10 dtk';
-    startT(10);
+    t.textContent='Waktu habis - soal di lempar ke tim berikutnya';throwTo(ph+1);
+    
+    
+    
+    
   }else t.textContent='Waktu habis';
 }
 function showStep(){
@@ -445,10 +455,10 @@ function showStep(){
   }else if(st.k==='v')h=vdHTML(st);else h=st.k==='sum'?sumHTML(st.n):sbHTML();
   V.innerHTML=h+`<div class="snav"><button class="g" id="prev">‹ Sebelumnya</button><button class="g" id="menu">Menu</button><button class="g" id="next">Berikutnya ›</button></div>`;
   
-  pubPos(st);if(st.k==='sb')countUp();if(st.k==='v')vdSound(vget(st.s+':'+st.i));if(st.k==='q'&&st.timer){ph=0;vstop=!!vget(st.s+':'+st.i);startT(Q[st.s][st.i].t==='N'?90:30)}
+  pubPos(st);if(st.k==='sb')countUp();if(st.k==='v')vdSound(vget(st.s+':'+st.i));if(st.k==='q'&&st.timer){ph=0;if(st.s==='s2'&&vget(st.s+':'+st.i+'#'))vset(st.s+':'+st.i+'#','');vstop=!!vget(st.s+':'+st.i);startT(Q[st.s][st.i].t==='N'?90:30)}
 }
 const go=n=>{pos=Math.max(0,Math.min(steps.length-1,n));showStep()};
-const next=()=>{if(pos<steps.length-1)go(pos+1);else if(cur<3){steps=build(cur+1);pos=0;showStep()}else soalMenu()};
+const next=()=>{if(pos<steps.length-1&&!(steps[pos+1].k==='sb'&&!sbOn())){go(pos+1);return}if(cur<3){steps=build(cur+1);pos=0;showStep()}else soalMenu()};
 
 function soalMenu(){
   mode='menu';stopT();releaseLock();POS={k:'menu'};roomPush('pos');opRender();const n=[Q.s1,Q.s2,Q.s3].map(a=>a.filter(x=>x.q.trim()).length),lk=lockedByOther();
@@ -512,22 +522,24 @@ function vdHTML(st){
   return pill('Soal '+st.no)+'<div class="sbar"></div><div class="vd '+(v==='B'?'ok':v==='S'?'no':'wait')+'"><div class="vcard">'+ic+'<div class="vt">'+(v==='B'?'BENAR':v==='S'?'SALAH':'Menunggu Keputusan Juri')+'</div></div></div>';
 }
 function setVd(v){const st=steps[pos];if(mode!=='show'||!st||(st.k!=='q'&&st.k!=='v'))return;vset(st.s+':'+st.i,v);if(st.k==='q')go(pos+1);else showStep()}
-function vdRefresh(){vsync();if(mode==='show'&&steps[pos]&&steps[pos].k==='v')showStep()}
+function vdRefresh(){vsync();thrSync();if(mode==='show'&&steps[pos]&&steps[pos].k==='v')showStep()}
 function clearVd(n){let c=0;Object.keys(VD).forEach(k=>{if(k.startsWith('s'+n+':')&&VD[k].v){VD[k]={v:'',t:Date.now()};c=1}});if(c)roomPush('verdict')}
 function pubPos(st){POS=(st.k==='q'||st.k==='v')?{k:st.k,s:st.s,i:st.i,no:st.no,of:st.of,ttl:st.ttl,team:st.team===undefined?-1:st.team}:{k:st.k};roomPush('pos');opRender()}
 function posLabel(p){if(!p)return 'Belum ada soal tampil';if(p.s)return p.ttl+' · Soal '+p.no+'/'+p.of+(p.k==='v'?' · Penilaian':'');return {anim:'Pembuka sesi',sum:'Seluruh soal',sb:'Papan skor',menu:'Menu soal'}[p.k]||''}
 function opRender(){
   const el=$('#opView');if(!el||el.hidden)return;
-  const p=POS,ok=!!(p&&p.s),v=ok?vget(p.s+':'+p.i):'',dis=ok?'':' disabled';
-  const qq=ok&&Q[p.s]&&Q[p.s][p.i],tg=(ok&&p.team>=0?'<span class="opt2">Giliran '+esc(S.names[p.team])+'</span>':'')+(qq&&qq.q?'<span class="opq">'+esc(qq.q)+'</span>':'')+(qq&&qq.k?'<span class="opk">Kunci: '+esc(qq.k)+'</span>':'');
-  el.innerHTML='<div class="op"><div class="opn"><small>Sedang tampil</small><b>'+esc(posLabel(p))+'</b>'+tg+'</div><div class="opv"><button class="vb ok'+(v==='B'?' on':'')+'" data-v="B"'+dis+'>BENAR</button><button class="vb no'+(v==='S'?' on':'')+'" data-v="S"'+dis+'>SALAH</button><button class="g" data-v=""'+dis+'>Hapus</button></div>'
+  const ae=document.activeElement;if(ae&&ae.tagName==='SELECT'&&el.contains(ae))return;const p=POS,ok=!!(p&&p.s),v=ok?vget(p.s+':'+p.i):'',dis=ok?'':' disabled',lem=ok&&p.k==='q'&&p.s==='s2',nth=ok&&p.s==='s2'?(+vget(p.s+':'+p.i+'#')||0):0;
+  const qq=ok&&Q[p.s]&&Q[p.s][p.i],tg=(ok&&p.team>=0?'<span class="opt2">Giliran '+esc(S.names[(p.team+nth)%3])+(nth?' (lemparan ke-'+(nth+1)+')':'')+'</span>':'')+(qq&&qq.q?'<span class="opq">'+esc(qq.q)+'</span>':'')+(qq&&qq.k?'<span class="opk">Kunci: '+esc(qq.k)+'</span>':'');
+  el.innerHTML='<div class="op"><div class="opn"><small>Sedang tampil</small><b>'+esc(posLabel(p))+'</b>'+tg+'</div><div class="opv"><button class="vb ok'+(v==='B'?' on':'')+'" data-v="B"'+dis+'>BENAR</button><button class="vb no'+(v==='S'?' on':'')+'" data-v="S"'+dis+'>SALAH</button><button class="g" data-v=""'+dis+'>Hapus</button></div>'+(lem?thBlock(p,v,nth):'')
    +S.scores.map((s,i)=>'<div class="ot" style="--c:var(--t'+i+')"><div class="on2"><b>'+esc(S.names[i])+'</b><span>'+fmt(s)+'</span></div><div class="ob"><button class="p" data-i="'+i+'" data-d="100">+100</button>'+[25,50,100].map(d=>'<button data-i="'+i+'" data-d="-'+d+'">−'+d+'</button>').join('')+'</div></div>').join('')
-   +'<button class="g" id="opUndo">Urungkan</button></div>';
+   +cfgBlock()+'<button class="g" id="opUndo">Urungkan</button></div>';
 }
 $('#opView').onclick=e=>{
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.v!==undefined){const p=POS;if(p&&p.s){vset(p.s+':'+p.i,b.dataset.v);vdRefresh();opRender()}}
   else if(b.dataset.d)change(+b.dataset.i,+b.dataset.d);
+  else if(b.dataset.th)opThrow();
+  else if(b.dataset.cf){CFG[b.dataset.cf]=b.dataset.cv;CFG=normCfg(CFG);saveCfg();opRender()}
   else if(b.id==='opUndo')$('#undo').click();
 };
 function applyScores(d){S.title=String(d.title||'');S.names=d.names.map(String);S.scores=d.scores.map(Number);try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}if(title.value!==S.title)title.value=S.title;P.forEach((p,i)=>{const n=p.querySelector('.name');if(n.value!==S.names[i])n.value=S.names[i]});render();soalSb()}
@@ -538,10 +550,11 @@ function roomRecv(k,d){
   else if(k==='hb'&&d.id){Room.peers[d.id]={t:Date.now()};roomUi()}
   else if(k==='lock'){Room.lock={h:d.h||null,at:Date.now()};if(d.h&&d.h!==Room.id&&(mode==='show'||mode==='edit')){if(mode==='edit'||d.to||d.h<Room.id)soalMenu();else pushLock(Room.id)}else if(mode==='menu')soalMenu();Room.lk=lockedByOther()}
   else if(k==='soal')recvSoal(d);
+  else if(k==='cfg'){CFG=normCfg(d);Room.last.cfg=JSON.stringify({sb:CFG.sb,t1:CFG.t1,t2:CFG.t2});try{localStorage.setItem('lcc-cfg-v1',JSON.stringify(CFG))}catch(e){}opRender()}
 }
 function roomPush(k){
   const c=Room.cl;if(!c||!c.connected)return;
-  if(k==='soal')return pushSoal();if(k==='pos'&&lockedByOther())return;const p=k==='scores'?{title:S.title,names:S.names,scores:S.scores}:k==='verdict'?{map:VD}:k==='pos'?{p:POS}:null;if(!p)return;
+  if(k==='soal')return pushSoal();if(k==='pos'&&lockedByOther())return;const p=k==='scores'?{title:S.title,names:S.names,scores:S.scores}:k==='verdict'?{map:VD}:k==='pos'?{p:POS}:k==='cfg'?{sb:CFG.sb,t1:CFG.t1,t2:CFG.t2}:null;if(!p)return;
   const s=JSON.stringify(p);if(Room.last[k]===s)return;Room.last[k]=s;
   c.publish('lccwik/v1/'+Room.code+'/'+k,JSON.stringify({...p,from:Room.id,t:Date.now()}),{qos:1,retain:true});
 }
@@ -568,7 +581,7 @@ async function roomCreate(){
   setErr('Menghubungkan…');let er='';
   for(const L of ['E','H']){
     const code=L+Array.from({length:5},()=>AL[Math.random()*32|0]).join('');
-    try{await loadMqtt();const c=await openMq(code);attach(c,code);['scores','verdict','pos','soal'].forEach(roomPush);setErr('');roomUi(1);return}catch(e){er=String(e)}
+    try{await loadMqtt();const c=await openMq(code);attach(c,code);['scores','verdict','pos','soal','cfg'].forEach(roomPush);setErr('');roomUi(1);return}catch(e){er=String(e)}
   }
   setErr(er);
 }
@@ -608,6 +621,35 @@ $('#roomDlg').onclick=e=>{
 const skin=$('#skin');skin.value=S.skin||'';
 const applySkin=()=>{if(S.skin)document.documentElement.dataset.skin=S.skin;else delete document.documentElement.dataset.skin;try{draw()}catch(e){}};
 skin.onchange=()=>{S.skin=skin.value;applySkin();save()};applySkin();
+var CFG={sb:'end',t1:10,t2:5},cfgOpen=false;
+function normCfg(c){return{sb:c&&c.sb==='all'?'all':'end',t1:Math.max(5,Math.min(10,+(c&&c.t1)||10)),t2:Math.max(5,Math.min(10,+(c&&c.t2)||5))}}
+try{CFG=normCfg(JSON.parse(localStorage.getItem('lcc-cfg-v1')))}catch(e){CFG=normCfg(null)}
+function saveCfg(){try{localStorage.setItem('lcc-cfg-v1',JSON.stringify(CFG))}catch(e){}roomPush('cfg')}
+const sbOn=()=>CFG.sb==='all'||cur===3;
+function throwTo(n,rem){
+  const st=steps[pos];if(!st||st.s!=='s2'||n<=ph||n>2)return;
+  ph=n;if(!rem)vset(st.s+':'+st.i+'#',n);
+  const i=(st.team+n)%3,e=$('#turn');
+  if(e){e.style.setProperty('--c','var(--t'+i+')');e.textContent='Giliran: '+S.names[i]}
+  stopT();vstop=false;startT(n===1?CFG.t1:CFG.t2);
+}
+function thrSync(){
+  const st=steps[pos];if(mode!=='show'||!st||st.k!=='q'||st.s!=='s2'||vget(st.s+':'+st.i))return;
+  const n=+vget(st.s+':'+st.i+'#')||0;if(n<=ph)return;
+  const t=$('#thr');if(t){t.hidden=false;t.textContent='Soal dilempar ke tim berikutnya'}
+  vdSound('S');throwTo(n,true);
+}
+function opThrow(){const p=POS;if(!(p&&p.k==='q'&&p.s==='s2')||vget(p.s+':'+p.i))return;const n=(+vget(p.s+':'+p.i+'#')||0)+1;if(n>2)return;vset(p.s+':'+p.i+'#',n);vdRefresh();opRender()}
+function thBlock(p,v,n){
+  const nx=(p.team+n+1)%3,off=n>=2||v;
+  return '<div class="opth"><small>Lemparan: tim ke-'+(n+1)+' dari 3 sedang menjawab</small><button class="g big" data-th="1"'+(off?' disabled':'')+'>'+(n>=2?'Tidak ada tim berikutnya':'Reset dan lempar ke '+esc(S.names[nx])+' ('+(n===0?CFG.t1:CFG.t2)+' dtk)')+'</button></div>';
+}
+function cfgBlock(){
+  const o=v=>[5,6,7,8,9,10].map(s=>'<option value="'+s+'"'+(s===v?' selected':'')+'>'+s+' detik</option>').join('');
+  return '<details class="ocfg"'+(cfgOpen?' open':'')+'><summary>Pengaturan</summary><div class="cfr"><span>Papan skor</span><div class="seg"><button data-cf="sb" data-cv="end" class="'+(CFG.sb==='end'?'on':'')+'">Hanya di akhir</button><button data-cf="sb" data-cv="all" class="'+(CFG.sb==='all'?'on':'')+'">Setiap babak</button></div></div><div class="cfr"><span>Waktu lemparan ke tim ke-2</span><select data-cfs="t1">'+o(CFG.t1)+'</select></div><div class="cfr"><span>Waktu lemparan ke tim ke-3</span><select data-cfs="t2">'+o(CFG.t2)+'</select></div></details>';
+}
+$('#opView').onchange=e=>{const t=e.target;if(t.dataset&&t.dataset.cfs){CFG[t.dataset.cfs]=+t.value;CFG=normCfg(CFG);saveCfg()}};
+$('#opView').addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('ocfg'))cfgOpen=e.target.open},true);
 var base=null,vstop=false;
 function reEdit(){const t=V.scrollTop;V.innerHTML=editHTML();V.scrollTop=t}
 function addQ(v){const[s,g]=v.split(':'),G=+g;if(mode!=='edit'||Q.n[s][G]>=100)return;Q[s].splice(rg(s)[G][1],0,{t:'L',q:'',k:''});Q.n[s][G]++;saveQ();reEdit();const t=V.querySelectorAll('.eq textarea');if(t.length)t[t.length-1].focus()}
@@ -630,7 +672,7 @@ function takeOver(b){if(!b.dataset.arm){b.dataset.arm=1;b.textContent='Yakin? Kl
 function roomWipe(b){
   if(!b.dataset.arm){b.dataset.arm=1;b.textContent='Yakin? Klik lagi';setTimeout(()=>{if(b.isConnected){b.textContent='Hapus data room';delete b.dataset.arm}},3000);return}
   const c=Room.cl;Room.lock=null;
-  if(c&&c.connected)['scores','verdict','pos','soal','lock'].forEach(t=>c.publish('lccwik/v1/'+Room.code+'/'+t,'',{qos:1,retain:true}));
+  if(c&&c.connected)['scores','verdict','pos','soal','lock','cfg'].forEach(t=>c.publish('lccwik/v1/'+Room.code+'/'+t,'',{qos:1,retain:true}));
   setTimeout(roomLeave,400);
 }
 function countUp(){
